@@ -1,0 +1,63 @@
+{
+	"Events": [
+		{
+			"EventID": 0,
+			"EventName": "GameStart",
+			"EventTime": 0.019853100180625917
+		},
+		{
+			"EventID": 1,
+			"EventName": "MinionsSpawning",
+			"EventTime": 30.013383865356447
+		},
+		{
+			"Assisters": [],
+			"DragonType": "Air",
+			"EventID": 2,
+			"EventName": "DragonKill",
+			"EventTime": 164.16049194335938,
+			"KillerName": "Água Gourmet",
+			"Stolen": "False"
+		},
+		{
+			"Assisters": [],
+			"DragonType": "Air",
+			"EventID": 3,
+			"EventName": "DragonKill",
+			"EventTime": 1219.0198974609376,
+			"KillerName": "Água Gourmet",
+			"Stolen": "False"
+		},
+		{
+			"Assisters": [],
+			"DragonType": "Earth",
+			"EventID": 4,
+			"EventName": "DragonKill",
+			"EventTime": 1272.17431640625,
+			"KillerName": "Água Gourmet",
+			"Stolen": "False"
+		},
+		{
+			"Assisters": [],
+			"EventID": 5,
+			"EventName": "TurretKilled",
+			"EventTime": 1906.1397705078126,
+			"KillerName": "Minion_T100L1S62N0376",
+			"TurretKilled": "Turret_TChaos_L1_P3_2254202041_0"
+		},
+		{
+			"EventID": 6,
+			"EventName": "FirstBrick",
+			"EventTime": 1906.1397705078126,
+			"KillerName": "Minion_T100L1S62N0376"
+		},
+		{
+			"Assisters": [],
+			"EventID": 7,
+			"EventName": "TurretKilled",
+			"EventTime": 1971.240478515625,
+			"KillerName": "Minion_T100L0S64N0387",
+			"TurretKilled": "Turret_TChaos_L0_P3_511845594_0"
+		}
+	]
+}
