@@ -16,7 +16,6 @@ public class StreamerBotApiClient {
         this.streamerBotApi = streamerBotApi;
     }
 
-
     public void doAction(Action action){
         streamerBotApi
                 .post()

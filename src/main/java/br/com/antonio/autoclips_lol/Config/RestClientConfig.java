@@ -1,14 +1,13 @@
 package br.com.antonio.autoclips_lol.Config;
 
 import br.com.antonio.autoclips_lol.LeagueOfLegends.Client.LockFile;
-import br.com.antonio.autoclips_lol.LeagueOfLegends.InGame.EventList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 @Configuration
 public class RestClientConfig {
-    private GlobalVariables globalVariables;
+    private GlobalVariables globalVariables = GlobalVariables.fromJsonFile();
 
     @Bean
     public RestClient.Builder restClientBuilder(){
@@ -35,17 +34,16 @@ public class RestClientConfig {
     @Bean
     public RestClient inGameLeagueApi(RestClient.Builder restClientBuilder) {
         return restClientBuilder
-                .baseUrl("https://"+globalVariables.leagueOfLegendsBaseUrl()+"2999")
+                .baseUrl("https://"+globalVariables.leagueOfLegendsBaseUrl()+":2999")
                 .build();
     }
 
     @Bean
     public RestClient streamerBotApi(RestClient.Builder restClientBuilder) {
         return restClientBuilder
-                .baseUrl(globalVariables.streamerBotBaseUrl())
+//                .baseUrl(globalVariables.streamerBotBaseUrl())
+                .baseUrl("http://127.0.0.1:7474")//todo voltar com a variavel global aqui
                 .build();
     }
-
-
 
 }

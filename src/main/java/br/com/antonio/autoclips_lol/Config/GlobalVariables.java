@@ -2,6 +2,7 @@ package br.com.antonio.autoclips_lol.Config;
 
 import br.com.antonio.autoclips_lol.LeagueOfLegends.Client.LockFile;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -10,8 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public record GlobalVariables(
-        @JsonProperty
-        String riotAccount,
         @JsonProperty
         String clientPath,
         @JsonProperty
