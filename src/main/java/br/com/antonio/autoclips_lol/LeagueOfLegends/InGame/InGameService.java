@@ -1,16 +1,16 @@
 package br.com.antonio.autoclips_lol.LeagueOfLegends.InGame;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import static java.lang.IO.println;
 
-@Component
-public class InGameListener {
+@Service
+public class InGameService {
 
     private final EventService eventService;
-    public InGameListener(EventService eventService) {
+    public InGameService(EventService eventService) {
         this.eventService = eventService;
     }
 
@@ -25,5 +25,8 @@ public class InGameListener {
         }catch (HttpClientErrorException httpClientErrorException) {
 
         }
+    }
+    private void eventHandler(InGameEvent event){
+        //todo adicionar um switch para que cada evento chame um metodo especifico de reacao ao evento
     }
 }

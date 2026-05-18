@@ -37,7 +37,7 @@ public class StreamerBotService {
                     .findFirst()
                     .ifPresent(foundAction -> {
                         defaultActions.put(defaultAction, foundAction);
-                        println("Default action carregada: "
+                        println("Action assimilada: "
                                 + defaultAction
                                 + " -> "
                                 + foundAction.name()

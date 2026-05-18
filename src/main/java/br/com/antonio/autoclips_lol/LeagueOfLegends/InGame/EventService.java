@@ -59,7 +59,5 @@ public class EventService {
         lastEventById = -1;
     }
 
-    private void eventHandler(InGameEvent event){
-        //todo adicionar um switch para que cada evento chame um metodo especifico de reacao ao evento
-    }
+
 }
