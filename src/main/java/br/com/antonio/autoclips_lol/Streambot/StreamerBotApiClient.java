@@ -16,6 +16,14 @@ public class StreamerBotApiClient {
         this.streamerBotApi = streamerBotApi;
     }
 
+    public ActionList getActions() {
+        return streamerBotApi
+                .get()
+                .uri("/GetActions")
+                .retrieve()
+                .body(ActionList.class);
+    }
+
     public void doAction(Action action){
         streamerBotApi
                 .post()

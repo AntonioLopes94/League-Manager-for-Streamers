@@ -1,6 +1,8 @@
 package br.com.antonio.autoclips_lol.LeagueOfLegends.Client;
 
+import br.com.antonio.autoclips_lol.LeagueOfLegends.InGame.EventService;
 import br.com.antonio.autoclips_lol.LeagueOfLegends.InGame.InGameListener;
+import br.com.antonio.autoclips_lol.Streambot.StreamerBotService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,23 +15,57 @@ import static java.lang.IO.println;
 @Service
 public class LeagueClientService{
     private final InGameListener inGameListener;
+    private final EventService eventService;
     private final RestClient leagueClientApi;
     private boolean readyCheckAccepted = false;
 
-    public LeagueClientService(InGameListener inGameListener, @Qualifier("leagueClientApi") RestClient leagueClientApi) {
+    public LeagueClientService(InGameListener inGameListener, EventService eventService, @Qualifier("leagueClientApi") RestClient leagueClientApi) {
         this.inGameListener = inGameListener;
+        this.eventService = eventService;
         this.leagueClientApi = leagueClientApi;
     }
 
-    @Scheduled(fixedRate = 1000)
-    public String gameflowPhase() {
-        return leagueClientApi
-                    .get()
-                    .uri("/lol-gameflow/v1/gameflow-phase")
-                    .retrieve()
-                    .body(String.class)
-                    .replace("\"", "");//todo retirar depois
+    @Scheduled(fixedDelay = 1000)
+
+    public void clientHandler(){
+        String actualGameFlowPhase = gameFlowPhase();
+        println("GameFlowPhase atual: [" + actualGameFlowPhase + "]");
+        switch (actualGameFlowPhase){
+            case GameFlowPhase.NONE ->  {
+                readyCheckAccepted = false;
+            }
+            case GameFlowPhase.LOBBY -> {
+                readyCheckAccepted = false;
+                eventService.resetLastEventById();
+            }
+            case GameFlowPhase.READY_CHECK ->  {
+                if(!readyCheckAccepted){
+                    acceptReadyCheck();
+                    readyCheckAccepted = true;
+                }
+            }
+//            case GameFlowPhase.CHAMP_SELECT ->
+
+//            case GameFlowPhase.MATCHMAKING ->
+
+            case GameFlowPhase.IN_PROGRESS -> {
+                inGameListener.eventListener();
+            }
+
+            default -> {
+                // Lobby, Matchmaking, ChampSelect etc.
+            }
         }
+    }
+
+    public String gameFlowPhase() {
+        return leagueClientApi
+                .get()
+                .uri("/lol-gameflow/v1/gameflow-phase")
+                .retrieve()
+                .body(String.class)
+                .replace("\"", "");
+    }
 
     public void acceptReadyCheck() {
         try {
@@ -42,21 +78,6 @@ public class LeagueClientService{
             println("Partida aceita");
         }catch (HttpServerErrorException | HttpClientErrorException e){
             println("Not ready to check " + e.getMessage());
-        }
-    }
-    @Scheduled(fixedDelay = 1000)
-    public void clientHandler(){
-        if("ReadyCheck".equalsIgnoreCase(gameflowPhase()) && !readyCheckAccepted){
-            acceptReadyCheck();
-            readyCheckAccepted = true;
-        }
-
-        if (!"ReadyCheck".equalsIgnoreCase(gameflowPhase())) {
-            readyCheckAccepted = false;
-        }
-
-        if ("InProgress".equalsIgnoreCase(gameflowPhase())){
-            inGameListener.eventListener();
         }
     }
 }

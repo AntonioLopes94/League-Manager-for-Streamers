@@ -5,6 +5,11 @@ public enum DefaultActions {
     ELO("!elo"),
     TESTE("TESTE123");
 
+    private final String actionName;
     DefaultActions(String actionName) {
+        this.actionName = actionName;
+    }
+    public String actionName() {
+        return actionName;
     }
 }

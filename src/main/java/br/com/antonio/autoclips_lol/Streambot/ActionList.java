@@ -1,4 +1,7 @@
 package br.com.antonio.autoclips_lol.Streambot;
 
-public record ActionList() {
-}
+import java.util.List;
+
+public record ActionList(
+        List<Action> actions
+) {}

@@ -1,6 +1,11 @@
 package br.com.antonio.autoclips_lol.Streambot;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
+
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.IO.println;
 
@@ -8,20 +13,41 @@ import static java.lang.IO.println;
 public class StreamerBotService {
 
     private final StreamerBotApiClient streamerBotApiClient;
+    private final Map<DefaultActions, Action> defaultActions = new EnumMap<>(DefaultActions.class);
+
 
     public StreamerBotService(StreamerBotApiClient streamerBotApiClient) {
         this.streamerBotApiClient = streamerBotApiClient;
     }
 
-    public void teste(){
-       println("entrou no teste do streamer bot connection");
-        Action action = new Action("184970e3-cafa-482f-8e52-d47ced640ced", "TESTE123");
-//        Action action = new Action("9d5cbfb1-5b49-4716-b3b9-fc021b52dd61", "!clip");
-//        Action action = new Action("d7b92e38-4d44-4744-ad4e-04489e75d3fc", "FAHH");
-        streamerBotApiClient.doAction(action);
-    }
+    @PostConstruct
+    public void loadDefaultActions(){
+        ActionList actionList = streamerBotApiClient.getActions();
+        List<Action> actions = actionList.actions();
 
-    public void doActionService(Action action){
+        for (Action action : actions) {
+            println("Action encontrada: " + action.name() + " | id: " + action.id());
+        }
+
+        for  (DefaultActions defaultAction : DefaultActions.values()) {
+            actions
+                    .stream()
+                    .filter(action ->
+                            action.name().equals(defaultAction.actionName()))
+                    .findFirst()
+                    .ifPresent(foundAction -> {
+                        defaultActions.put(defaultAction, foundAction);
+                        println("Default action carregada: "
+                                + defaultAction
+                                + " -> "
+                                + foundAction.name()
+                                + " | id: "
+                                + foundAction.id());
+                    });
+        }
+    }
+    public void doDefaultActions(DefaultActions defaultAction){
+        Action action = defaultActions.get(defaultAction);
         streamerBotApiClient.doAction(action);
     }
 }
