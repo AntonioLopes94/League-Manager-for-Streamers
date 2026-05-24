@@ -44,7 +44,7 @@ public class LeagueClientService{
 //            case GameFlowPhase.MATCHMAKING ->
 
             case GameFlowPhase.IN_PROGRESS -> {
-                inGameService.eventListener();
+                inGameService.InGameEventListener();
                 inGameService.eventHandler(inGameService.getLastEvent());
             }
 

@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.IO.println;
 
@@ -18,6 +17,7 @@ public class InGameService {
     private final StreamerBotService streamerBotService;
     private final List<InGameEvent> currentMatchEvents = new ArrayList<>();
     private int lastEventById = -1;
+    private final Set<Integer> processedEventIds = new HashSet<>();
     private CurrentPlayerService currentPlayerService;
 
     public InGameService(InGameApiClient inGameApiClient, CurrentPlayerService currentPlayerService, StreamerBotService streamerBotService) {
@@ -27,14 +27,17 @@ public class InGameService {
     }
 
     public void eventHandler(InGameEvent event){
-
         String currentPlayerName = currentPlayerService.getCurrentPlayerName();
+        if(!processedEventIds.add(event.eventId())){
+            return;
+        }
         switch(event.eventName()){
             case DefaultEvents.CHAMPION_KILL,  DefaultEvents.ACE -> {
-                if(event.killerName().equalsIgnoreCase(currentPlayerName)
-                        || event.victimName().equalsIgnoreCase(currentPlayerName)
-                        || event.assisters().contains(currentPlayerName)
-                        || event.acer().contains(currentPlayerName)) {
+                if(currentPlayerName.equalsIgnoreCase(event.killerName())
+                        || currentPlayerName.equalsIgnoreCase(event.victimName())
+//                        || currentPlayerName.equalsIgnoreCase(event.assisters())//todo arrumar um jeito de adicionar o nome por array assisters
+                        || currentPlayerName.equalsIgnoreCase(event.acer())) {
+
 //                    streamerBotService.doDefaultActions(DefaultActions.CLIP);
                     println("KILL CLIPADA");
                 }
@@ -47,33 +50,24 @@ public class InGameService {
         return currentMatchEvents.getLast();
     }
 
-    //todo escuta o evento -> se for novo salva na lista currentMatchEvents
-    //todo metodo getLastEvent
-    //todo metodo addToCurrentMatchEventsList
-    //todo criar um Enum com os Eventos?
-    //todo
-
-
-    public void eventListener() {
+    public void InGameEventListener() {
         try{
-            EventList eventList = inGameApiClient.getInGameEvents();
-            eventListToCurrentMatchEventsList(eventList);
+            EventList inGameEvents = inGameApiClient.getInGameEvents();
+            addNewEventToCurrentMatchList(inGameEvents);
         } catch (ResourceAccessException resourceAccessException) {
             println("Sem partidas acontecendo");//todo voltar com esse print
         } catch (NullPointerException e){
             println("Null point exception no inGameListener");
-        }catch (HttpClientErrorException httpClientErrorException) {
+        } catch (HttpClientErrorException httpClientErrorException) {
 
         }
     }
 
-    public void eventListToCurrentMatchEventsList(EventList eventList){
-        String currentPlayerName = currentPlayerService.getCurrentPlayerName();
-
-        if (eventList == null || eventList.events() == null) {
+    public void addNewEventToCurrentMatchList(EventList inGameEvents){
+        if (inGameEvents == null || inGameEvents.events() == null) {
             return;
         }
-        for (InGameEvent event : eventList.events()) {
+        for (InGameEvent event : inGameEvents.events()) {
             if (event.eventId() <= lastEventById) {
                 continue;
             }
@@ -81,6 +75,8 @@ public class InGameService {
             lastEventById = event.eventId();
         }
     }
+
+
     public void resetLastEventById() {
         lastEventById = -1;
     }
