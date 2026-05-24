@@ -14,7 +14,7 @@ public class CurrentPlayerController {
 
     @GetMapping(value = "/api/current-player/elo")
     public String currentPlayerElo() {
-        CurrentPlayerInfos player = currentPlayerService.playerInfos();
+        CurrentPlayerInfos player = currentPlayerService.updateCurrentPlayerInfos();
         CurrentPlayerRankedStats ranked = player.rankedSolo();
 
         if (ranked == null) {

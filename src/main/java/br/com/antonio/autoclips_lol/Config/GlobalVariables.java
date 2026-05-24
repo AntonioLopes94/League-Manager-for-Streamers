@@ -36,7 +36,6 @@ public record GlobalVariables(
             String content = Files.readString(lockfilePath).trim();
             return LockFile.fromString(content);
         } catch (IOException _) {
-            println("Erro ao ler lockfile");
             return new LockFile("LeagueClientUx",
                     "0",
                     "29999",

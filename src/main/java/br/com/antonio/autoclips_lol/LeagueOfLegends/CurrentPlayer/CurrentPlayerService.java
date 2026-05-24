@@ -2,7 +2,6 @@ package br.com.antonio.autoclips_lol.LeagueOfLegends.CurrentPlayer;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -14,9 +13,7 @@ public class CurrentPlayerService {
         this.leagueClientApi = leagueClientApi;
     }
 
-
-    @Scheduled(fixedRate = 1000)
-    public CurrentPlayerInfos playerInfos(){
+    public CurrentPlayerInfos updateCurrentPlayerInfos(){
         CurrentPlayerInfos infos = leagueClientApi
                 .get()
                 .uri("/lol-summoner/v1/current-summoner")
@@ -52,7 +49,7 @@ public class CurrentPlayerService {
     }
 
     public String getCurrentPlayerName() {
-        return playerInfos().gameName();
+        return updateCurrentPlayerInfos().gameName();
     }
 
 }
