@@ -1,6 +1,5 @@
 package br.com.antonio.autoclips_lol.LeagueOfLegends.Client;
 
-import br.com.antonio.autoclips_lol.LeagueOfLegends.InGame.EventService;
 import br.com.antonio.autoclips_lol.LeagueOfLegends.InGame.InGameService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,13 +13,11 @@ import static java.lang.IO.println;
 @Service
 public class LeagueClientService{
     private final InGameService inGameService;
-    private final EventService eventService;
     private final RestClient leagueClientApi;
     private boolean readyCheckAccepted = false;
 
-    public LeagueClientService(InGameService inGameService, EventService eventService, @Qualifier("leagueClientApi") RestClient leagueClientApi) {
+    public LeagueClientService(InGameService inGameService, @Qualifier("leagueClientApi") RestClient leagueClientApi) {
         this.inGameService = inGameService;
-        this.eventService = eventService;
         this.leagueClientApi = leagueClientApi;
     }
 
@@ -34,7 +31,7 @@ public class LeagueClientService{
             }
             case GameFlowPhase.LOBBY -> {
                 readyCheckAccepted = false;
-                eventService.resetLastEventById();
+                inGameService.resetLastEventById();
             }
             case GameFlowPhase.READY_CHECK ->  {
                 if(!readyCheckAccepted){
@@ -48,6 +45,7 @@ public class LeagueClientService{
 
             case GameFlowPhase.IN_PROGRESS -> {
                 inGameService.eventListener();
+                inGameService.eventHandler(inGameService.getLastEvent());
             }
 
             default -> {

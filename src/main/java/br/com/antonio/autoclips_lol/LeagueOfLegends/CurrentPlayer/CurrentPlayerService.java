@@ -51,4 +51,8 @@ public class CurrentPlayerService {
         return response.soloQueue();
     }
 
+    public String getCurrentPlayerName() {
+        return playerInfos().gameName();
+    }
+
 }

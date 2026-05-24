@@ -22,28 +22,32 @@ public class StreamerBotService {
 
     @PostConstruct
     public void loadDefaultActions(){
-        ActionList actionList = streamerBotApiClient.getActions();
-        List<Action> actions = actionList.actions();
+        try {
+            ActionList actionList = streamerBotApiClient.getActions();
+            List<Action> actions = actionList.actions();
 
-        for (Action action : actions) {
-            println("Action encontrada: " + action.name() + " | id: " + action.id());
-        }
+            for (Action action : actions) {
+                println("Action encontrada: " + action.name() + " | id: " + action.id());
+            }
 
-        for  (DefaultActions defaultAction : DefaultActions.values()) {
-            actions
-                    .stream()
-                    .filter(action ->
-                            action.name().equals(defaultAction.actionName()))
-                    .findFirst()
-                    .ifPresent(foundAction -> {
-                        defaultActions.put(defaultAction, foundAction);
-                        println("Action assimilada: "
-                                + defaultAction
-                                + " -> "
-                                + foundAction.name()
-                                + " | id: "
-                                + foundAction.id());
-                    });
+            for  (DefaultActions defaultAction : DefaultActions.values()) {
+                actions
+                        .stream()
+                        .filter(action ->
+                                action.name().equals(defaultAction.getActionName()))
+                        .findFirst()
+                        .ifPresent(foundAction -> {
+                            defaultActions.put(defaultAction, foundAction);
+                            println("Action assimilada: "
+                                    + defaultAction
+                                    + " -> "
+                                    + foundAction.name()
+                                    + " | id: "
+                                    + foundAction.id());
+                        });
+            }
+        } catch (Exception e) {
+
         }
     }
     public void doDefaultActions(DefaultActions defaultAction){

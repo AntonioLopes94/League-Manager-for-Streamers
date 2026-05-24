@@ -1,5 +1,8 @@
 package br.com.antonio.autoclips_lol.Streambot;
 
+import lombok.Getter;
+
+@Getter
 public enum DefaultActions {
     CLIP("!clip"),
     ELO("!elo"),
@@ -8,8 +11,5 @@ public enum DefaultActions {
     private final String actionName;
     DefaultActions(String actionName) {
         this.actionName = actionName;
-    }
-    public String actionName() {
-        return actionName;
     }
 }
