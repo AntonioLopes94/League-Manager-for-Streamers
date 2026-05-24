@@ -1,13 +1,16 @@
 package br.com.antonio.autoclips_lol.Config;
 
 import br.com.antonio.autoclips_lol.LeagueOfLegends.Client.LockFile;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
+import java.beans.BeanProperty;
+
 @Configuration
 public class RestClientConfig {
-    private GlobalVariables globalVariables = GlobalVariables.fromJsonFile();
+    private final GlobalVariables globalVariables = GlobalVariables.fromJsonFile();
 
     @Bean
     public RestClient.Builder restClientBuilder(){
@@ -15,6 +18,7 @@ public class RestClientConfig {
     }
 
     @Bean
+    @RefreshScope
     public RestClient leagueClientApi(RestClient.Builder restClientBuilder){
         LockFile lockFile = globalVariables.lockFile();
 

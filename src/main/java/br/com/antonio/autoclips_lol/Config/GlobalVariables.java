@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.lang.IO.println;
+
 public record GlobalVariables(
         @JsonProperty
         String clientPath,
@@ -33,8 +35,13 @@ public record GlobalVariables(
         try {
             String content = Files.readString(lockfilePath).trim();
             return LockFile.fromString(content);
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao ler lockfile", e);
+        } catch (IOException _) {
+            println("Erro ao ler lockfile");
+            return new LockFile("LeagueClientUx",
+                    "0",
+                    "29999",
+                    "placeholder",
+                    "https");
         }
     }
 }

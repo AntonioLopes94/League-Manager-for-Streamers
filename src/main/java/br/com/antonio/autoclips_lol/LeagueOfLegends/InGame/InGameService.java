@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.lang.IO.println;
 
@@ -32,10 +35,13 @@ public class InGameService {
             return;
         }
         switch(event.eventName()){
-            case DefaultEvents.CHAMPION_KILL,  DefaultEvents.ACE -> {
+            case DefaultEvents.CHAMPION_KILL,
+                 DefaultEvents.ACE,
+                 DefaultEvents.MULTIKILL -> {
                 if(currentPlayerName.equalsIgnoreCase(event.killerName())
                         || currentPlayerName.equalsIgnoreCase(event.victimName())
-//                        || currentPlayerName.equalsIgnoreCase(event.assisters())//todo arrumar um jeito de adicionar o nome por array assisters
+                        || event.assisters().contains(currentPlayerName)
+                        //todo arrumar um jeito de adicionar o nome por array assisters
                         || currentPlayerName.equalsIgnoreCase(event.acer())) {
 
 //                    streamerBotService.doDefaultActions(DefaultActions.CLIP);
@@ -77,7 +83,10 @@ public class InGameService {
     }
 
 
-    public void resetLastEventById() {
+    public void postGameVariablesReset() {
         lastEventById = -1;
+        currentMatchEvents.clear();
+        processedEventIds.clear();
+
     }
 }
