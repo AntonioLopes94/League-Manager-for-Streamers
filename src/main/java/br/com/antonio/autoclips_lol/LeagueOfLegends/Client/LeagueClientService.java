@@ -15,18 +15,20 @@ import static java.lang.IO.println;
 
 @Service
 public class LeagueClientService{
-    private final InGameService inGameService;
     private final RestClient leagueClientApi;
+    private final InGameService inGameService;
+    private final CurrentPlayerService currentPlayerService;
+    private final ChampSelectService champSelectService;
     private ReadyCheckService readyCheckService;
     private final RefreshScope refreshScope;
-    private final CurrentPlayerService currentPlayerService;
 
-    public LeagueClientService(InGameService inGameService, @Qualifier("leagueClientApi") RestClient leagueClientApi, ReadyCheckService readyCheckService, RefreshScope refreshScope, CurrentPlayerService currentPlayerService) {
+    public LeagueClientService(InGameService inGameService, @Qualifier("leagueClientApi") RestClient leagueClientApi, ReadyCheckService readyCheckService, RefreshScope refreshScope, CurrentPlayerService currentPlayerService, ChampSelectService champSelectService) {
         this.inGameService = inGameService;
         this.leagueClientApi = leagueClientApi;
         this.readyCheckService = readyCheckService;
         this.refreshScope = refreshScope;
         this.currentPlayerService = currentPlayerService;
+        this.champSelectService = champSelectService;
     }
 
     @Scheduled(fixedDelay = 5000)
@@ -38,7 +40,7 @@ public class LeagueClientService{
                 case GameFlowPhase.NONE ->  {
                     currentPlayerService.updateCurrentPlayerInfos();
                 }
-                case GameFlowPhase.LOBBY -> {
+                case GameFlowPhase.LOBBY, GameFlowPhase.MATCHMAKING -> {
                     readyCheckService.setReadyCheckAccepted(false);
                     inGameService.postGameVariablesReset();
 
@@ -48,7 +50,16 @@ public class LeagueClientService{
                         readyCheckService.acceptReadyCheck();
                     }
                 }
-    //            case GameFlowPhase.CHAMP_SELECT ->
+                case GameFlowPhase.CHAMP_SELECT -> {
+                    readyCheckService.setReadyCheckAccepted(false);
+                    try {
+                        Integer actionId = champSelectService.findMyPickActionId(champSelectService.getChampSelectSession());
+                        champSelectService.printChampSelectSession();
+                        champSelectService.hoverBan(actionId);
+                    } catch (NullPointerException _) {
+                        println("Null no try do hover");
+                    }
+                }
 
     //            case GameFlowPhase.MATCHMAKING ->
 
@@ -58,9 +69,10 @@ public class LeagueClientService{
                 }
 
                 default -> {
+                    println("default");
                 }
             }
-        } catch (ResourceAccessException _) {
+        } catch (ResourceAccessException | HttpClientErrorException _) {
             println("Jogo nao esta aberto");
             refreshScope.refresh("leagueClientApi");
         }

@@ -40,9 +40,10 @@ public class InGameService {
                  DefaultEvents.MULTIKILL -> {
                 if(currentPlayerName.equalsIgnoreCase(event.killerName())
                         || currentPlayerName.equalsIgnoreCase(event.victimName())
+                        || currentPlayerName.equalsIgnoreCase(event.acer())
                         || event.assisters().contains(currentPlayerName)
                         //todo arrumar um jeito de adicionar o nome por array assisters
-                        || currentPlayerName.equalsIgnoreCase(event.acer())) {
+                        ) {
 
 //                    streamerBotService.doDefaultActions(DefaultActions.CLIP);
                     println("KILL CLIPADA");
