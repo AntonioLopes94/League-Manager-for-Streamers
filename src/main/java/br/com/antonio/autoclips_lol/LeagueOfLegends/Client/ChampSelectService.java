@@ -24,19 +24,18 @@ public class ChampSelectService {
                 .body(ChampSelectSession.class);
     }
 
-    public Integer findMyPickActionId(ChampSelectSession session) {
+    public Integer findMyBanActionId(ChampSelectSession session) {
         int localPlayerCellId = session.localPlayerCellId();
 
         for (List<ChampSelectAction> actionGroup : session.actions()) {
             for (ChampSelectAction action : actionGroup) {
                 if (action.actorCellId() == localPlayerCellId
-                        && action.type().equals("pick")
+                        && action.type().equals("ban")//reiniciado com ban
                         && !action.completed()) {
                     return action.id();
                 }
             }
         }
-
         return null;
     }
 
@@ -45,11 +44,26 @@ public class ChampSelectService {
                 .patch()
                 .uri("/lol-champ-select/v1/session/actions/{actionId}", actionId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body("{\"championId\":33}")
+                .body("{\n" +
+                        "  \"championId\": 33,\n" +
+                        "  \"completed\": true\n" +
+                        "}")
                 .retrieve()
                 .toBodilessEntity();
 
         println("Rammus hovered for ban");
+    }
+
+    public void completeAction(int actionId) {
+        println("POST complete URI: /lol-champ-select/v1/session/actions/" + actionId + "/complete");
+
+        leagueClientApi
+                .post()
+                .uri("/lol-champ-select/v1/session/actions/{actionId}/complete", actionId)
+                .retrieve()
+                .toBodilessEntity();
+
+        println("Complete action request finished");
     }
 
     public void printChampSelectSession() {

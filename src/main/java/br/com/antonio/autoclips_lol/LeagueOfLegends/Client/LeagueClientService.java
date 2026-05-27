@@ -7,7 +7,6 @@ import org.springframework.cloud.context.scope.refresh.RefreshScope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
@@ -49,13 +48,22 @@ public class LeagueClientService{
                     if(!readyCheckService.isReadyCheckAccepted()){
                         readyCheckService.acceptReadyCheck();
                     }
+                    readyCheckService.setReadyCheckAccepted(false);
                 }
                 case GameFlowPhase.CHAMP_SELECT -> {
                     readyCheckService.setReadyCheckAccepted(false);
                     try {
-                        Integer actionId = champSelectService.findMyPickActionId(champSelectService.getChampSelectSession());
+                        Integer actionId = champSelectService.findMyBanActionId(champSelectService.getChampSelectSession());
                         champSelectService.printChampSelectSession();
-                        champSelectService.hoverBan(actionId);
+                        if (actionId != null) {
+                            println("Ban actionId found: " + actionId);
+
+                            champSelectService.hoverBan(actionId);
+
+                            println("Trying to complete actionId: " + actionId);
+                            champSelectService.completeAction(actionId);
+                            println("Complete sent for actionId: " + actionId);
+                        }
                     } catch (NullPointerException _) {
                         println("Null no try do hover");
                     }
