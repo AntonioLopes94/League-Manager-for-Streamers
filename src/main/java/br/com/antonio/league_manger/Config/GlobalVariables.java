@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static java.lang.IO.println;
-
 public record GlobalVariables(
         @JsonProperty
         String clientPath,

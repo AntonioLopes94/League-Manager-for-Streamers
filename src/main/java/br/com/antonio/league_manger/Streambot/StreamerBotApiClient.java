@@ -7,6 +7,8 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
+import static java.lang.IO.println;
+
 @Component
 public class StreamerBotApiClient {
 
@@ -17,6 +19,7 @@ public class StreamerBotApiClient {
     }
 
     public ActionList getActions() {
+        println("Get nas ações do Streamer bot");
         return streamerBotApi
                 .get()
                 .uri("/GetActions")
@@ -24,7 +27,7 @@ public class StreamerBotApiClient {
                 .body(ActionList.class);
     }
 
-    public void doAction(Action action){
+    public void postDoAction(Action action){
         streamerBotApi
                 .post()
                 .uri("/DoAction")

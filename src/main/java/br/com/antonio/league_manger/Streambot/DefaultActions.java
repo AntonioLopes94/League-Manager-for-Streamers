@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum DefaultActions {
-    CLIP("!clip"),
+    CLIPTWITCH("clipTwitch"),
     ELO("!elo"),
     TESTE("TESTE123");
 

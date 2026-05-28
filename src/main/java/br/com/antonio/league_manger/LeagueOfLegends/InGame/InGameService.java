@@ -1,6 +1,7 @@
 package br.com.antonio.league_manger.LeagueOfLegends.InGame;
 
 import br.com.antonio.league_manger.LeagueOfLegends.CurrentPlayer.CurrentPlayerService;
+import br.com.antonio.league_manger.Streambot.DefaultActions;
 import br.com.antonio.league_manger.Streambot.StreamerBotService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -45,7 +46,7 @@ public class InGameService {
                         //todo arrumar um jeito de adicionar o nome por array assisters
                         ) {
 
-//                    streamerBotService.doDefaultActions(DefaultActions.CLIP);
+                    streamerBotService.doDefaultActions(DefaultActions.CLIPTWITCH);
                     println("KILL CLIPADA");
                 }
             }

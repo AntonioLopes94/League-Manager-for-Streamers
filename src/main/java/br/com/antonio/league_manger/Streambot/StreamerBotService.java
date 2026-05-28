@@ -22,7 +22,9 @@ public class StreamerBotService {
 
     @PostConstruct
     public void loadDefaultActions(){
+        println("Carregando o defaultActions");
         try {
+            println("Try no defaultActions");
             ActionList actionList = streamerBotApiClient.getActions();
             List<Action> actions = actionList.actions();
 
@@ -47,11 +49,13 @@ public class StreamerBotService {
                         });
             }
         } catch (Exception e) {
-
+            println("Error while loading default actions: " + e.getClass().getSimpleName());
+            println("Message: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     public void doDefaultActions(DefaultActions defaultAction){
         Action action = defaultActions.get(defaultAction);
-        streamerBotApiClient.doAction(action);
+        streamerBotApiClient.postDoAction(action);
     }
 }
