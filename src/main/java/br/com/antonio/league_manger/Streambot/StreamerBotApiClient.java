@@ -13,7 +13,6 @@ import static java.lang.IO.println;
 public class StreamerBotApiClient {
 
     private final RestClient streamerBotApi;
-
     public StreamerBotApiClient(@Qualifier("streamerBotApi") RestClient streamerBotApi) {
         this.streamerBotApi = streamerBotApi;
     }

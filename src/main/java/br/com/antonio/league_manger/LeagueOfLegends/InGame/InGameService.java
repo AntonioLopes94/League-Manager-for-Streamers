@@ -22,9 +22,11 @@ public class InGameService {
     private final List<InGameEvent> currentMatchEvents = new ArrayList<>();
     private int lastEventById = -1;
     private final Set<Integer> processedEventIds = new HashSet<>();
-    private CurrentPlayerService currentPlayerService;
+    private final CurrentPlayerService currentPlayerService;
 
-    public InGameService(InGameApiClient inGameApiClient, CurrentPlayerService currentPlayerService, StreamerBotService streamerBotService) {
+    public InGameService(InGameApiClient inGameApiClient,
+                         CurrentPlayerService currentPlayerService,
+                         StreamerBotService streamerBotService) {
         this.inGameApiClient = inGameApiClient;
         this.currentPlayerService = currentPlayerService;
         this.streamerBotService = streamerBotService;
@@ -63,10 +65,11 @@ public class InGameService {
             EventList inGameEvents = inGameApiClient.getInGameEvents();
             addNewEventToCurrentMatchList(inGameEvents);
         } catch (ResourceAccessException resourceAccessException) {
-            println("Sem partidas acontecendo");//todo voltar com esse print
+            println("Sem partidas acontecendo");
         } catch (NullPointerException e){
-            println("Null point exception no inGameListener");
+            println("Nullpointerexception no inGameListener");
         } catch (HttpClientErrorException httpClientErrorException) {
+            println("httpclienterrorexception no inGameListener");
 
         }
     }
@@ -89,6 +92,5 @@ public class InGameService {
         lastEventById = -1;
         currentMatchEvents.clear();
         processedEventIds.clear();
-
     }
 }

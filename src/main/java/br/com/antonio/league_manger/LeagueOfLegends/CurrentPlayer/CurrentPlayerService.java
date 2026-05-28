@@ -44,12 +44,10 @@ public class CurrentPlayerService {
         if (response == null) {
             return null;
         }
-
         return response.soloQueue();
     }
 
     public String getCurrentPlayerName() {
         return updateCurrentPlayerInfos().gameName();
     }
-
 }

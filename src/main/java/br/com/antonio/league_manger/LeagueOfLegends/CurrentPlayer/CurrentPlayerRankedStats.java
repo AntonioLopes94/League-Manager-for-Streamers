@@ -7,19 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record CurrentPlayerRankedStats (
         @JsonProperty("queueType")
         String queueType,
-
         @JsonProperty("tier")
         String tier,
-
         @JsonProperty("division")
         String division,
-
         @JsonProperty("leaguePoints")
         Integer leaguePoints,
-
         @JsonProperty("wins")
         Integer wins,
-
         @JsonProperty("losses")
         Integer losses
 ){

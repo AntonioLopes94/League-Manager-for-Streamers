@@ -18,7 +18,7 @@ public class LeagueClientService{
     private final InGameService inGameService;
     private final CurrentPlayerService currentPlayerService;
     private final ChampSelectService champSelectService;
-    private ReadyCheckService readyCheckService;
+    private final ReadyCheckService readyCheckService;
     private final RefreshScope refreshScope;
 
     public LeagueClientService(InGameService inGameService,
@@ -41,49 +41,34 @@ public class LeagueClientService{
             String actualGameFlowPhase = gameFlowPhase();
             println("GameFlowPhase atual: [" + actualGameFlowPhase + "]");
             switch (actualGameFlowPhase){
-                case GameFlowPhase.NONE ->  {
+                case GameFlowPhase.NONE ->
                     currentPlayerService.updateCurrentPlayerInfos();
-                }
-                case GameFlowPhase.LOBBY, GameFlowPhase.MATCHMAKING -> {
-                    readyCheckService.setReadyCheckAccepted(false);
+                case GameFlowPhase.LOBBY, GameFlowPhase.MATCHMAKING ->
                     inGameService.postGameVariablesReset();
-
-                }
-                case GameFlowPhase.READY_CHECK ->  {
-                    if(!readyCheckService.isReadyCheckAccepted()){
+                case GameFlowPhase.READY_CHECK ->
+                    //if(!readyCheckService.isReadyCheckAccepted()){//todo confirmar se precisa mesmo
                         readyCheckService.acceptReadyCheck();
-                    }
-                    readyCheckService.setReadyCheckAccepted(false);
-                }
-                case GameFlowPhase.CHAMP_SELECT -> {
-                    readyCheckService.setReadyCheckAccepted(false);
+                    //}
+                    //readyCheckService.setReadyCheckAccepted(false);
+                case GameFlowPhase.CHAMP_SELECT ->
                     try {
-                        Integer actionId = champSelectService.findMyBanActionId(champSelectService.getChampSelectSession());
-                        champSelectService.printChampSelectSession();
+                        ChampSelectSession champSelectSession = champSelectService.getChampSelectSession();
+                        Integer actionId = champSelectService.findMyBanActionId(champSelectSession);
                         if (actionId != null) {
-                            println("Ban actionId found: " + actionId);
-
-                            champSelectService.hoverBan(actionId);
-
-                            println("Trying to complete actionId: " + actionId);
+                            champSelectService.hoverBan(actionId, 33);
                             champSelectService.completeAction(actionId);
                             println("Complete sent for actionId: " + actionId);
                         }
                     } catch (NullPointerException _) {
                         println("Null no try do hover");
                     }
-                }
-
-    //            case GameFlowPhase.MATCHMAKING ->
-
-                case GameFlowPhase.IN_PROGRESS -> {
+                case GameFlowPhase.GAME_START ->
+                    println("Partida começando");
+                case GameFlowPhase.IN_PROGRESS ->
                     inGameService.InGameEventListener();
                     inGameService.eventHandler(inGameService.getLastEvent());
-                }
-
-                default -> {
-                    println("default");
-                }
+                default ->
+                    println("default handler do client");
             }
         } catch (ResourceAccessException | HttpClientErrorException _) {
             println("Jogo nao esta aberto");

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CurrentPlayerController {
 
     private final  CurrentPlayerService currentPlayerService;
-
     public CurrentPlayerController(CurrentPlayerService currentPlayerService) {
         this.currentPlayerService = currentPlayerService;
     }
@@ -20,7 +19,6 @@ public class CurrentPlayerController {
         if (ranked == null) {
             return player.gameName() + "#" + player.tagLine() + " está sem dados de Ranked Solo.";
         }
-
         return player.gameName()
                 + "#"
                 + player.tagLine()
@@ -36,5 +34,4 @@ public class CurrentPlayerController {
                 + ranked.losses()
                 + "L.";
     }
-
 }

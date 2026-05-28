@@ -13,8 +13,8 @@ import static java.lang.IO.println;
 @Getter
 public class ReadyCheckService {
     private final RestClient leagueClientApi;
-    @Setter
-    private boolean readyCheckAccepted = false;
+    //@Setter
+    //private boolean readyCheckAccepted = false;
 
     public ReadyCheckService(RestClient leagueClientApi) {
         this.leagueClientApi = leagueClientApi;
@@ -29,7 +29,7 @@ public class ReadyCheckService {
                     .retrieve()
                     .toBodilessEntity();
             println("Partida aceita");
-            readyCheckAccepted = true;
+            //readyCheckAccepted = true;//todo confirmar se precisa desse check mesmo
         }catch (HttpServerErrorException | HttpClientErrorException e){
             println("Not ready to check " + e.getMessage());
         }

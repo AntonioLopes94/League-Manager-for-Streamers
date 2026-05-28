@@ -7,7 +7,6 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record RankedStatsResponse(
-
         @JsonProperty("queueMap")
         Map<String, CurrentPlayerRankedStats> queueMap
 ) {

@@ -15,7 +15,6 @@ public class StreamerBotService {
     private final StreamerBotApiClient streamerBotApiClient;
     private final Map<DefaultActions, Action> defaultActions = new EnumMap<>(DefaultActions.class);
 
-
     public StreamerBotService(StreamerBotApiClient streamerBotApiClient) {
         this.streamerBotApiClient = streamerBotApiClient;
     }
@@ -31,7 +30,6 @@ public class StreamerBotService {
             for (Action action : actions) {
                 println("Action encontrada: " + action.name() + " | id: " + action.id());
             }
-
             for  (DefaultActions defaultAction : DefaultActions.values()) {
                 actions
                         .stream()

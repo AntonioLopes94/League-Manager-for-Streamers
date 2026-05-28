@@ -7,11 +7,10 @@ import org.springframework.web.client.RestClient;
 import java.util.List;
 
 import static java.lang.IO.println;
+
 @Service
 public class ChampSelectService {
     private final RestClient leagueClientApi;
-    private static final int RAMMUS_ID = 33;
-
     public ChampSelectService(RestClient leagueClientApi) {
         this.leagueClientApi = leagueClientApi;
     }
@@ -39,19 +38,18 @@ public class ChampSelectService {
         return null;
     }
 
-    public void hoverBan(int actionId) {
+    public void hoverBan(int actionId, int championId) {
         leagueClientApi
                 .patch()
                 .uri("/lol-champ-select/v1/session/actions/{actionId}", actionId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body("{\n" +
-                        "  \"championId\": 33,\n" +
+                        "  \"championId\": " + championId + ",\n" +
                         "  \"completed\": true\n" +
                         "}")
                 .retrieve()
                 .toBodilessEntity();
-
-        println("Rammus hovered for ban");
+        println("Ban no hover");
     }
 
     public void completeAction(int actionId) {
@@ -63,16 +61,15 @@ public class ChampSelectService {
                 .retrieve()
                 .toBodilessEntity();
 
-        println("Complete action request finished");
+        println("Action completa");
     }
 
-    public void printChampSelectSession() {
+    public void logChampSelectSession() {
         String session = leagueClientApi
                 .get()
                 .uri("/lol-champ-select/v1/session")
                 .retrieve()
                 .body(String.class);
-
         println(session);
     }
 

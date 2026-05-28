@@ -9,40 +9,28 @@ import java.util.List;
 public record InGameEvent(
         @JsonProperty("EventID")
         Integer eventId,
-
         @JsonProperty("EventName")
         String eventName,
-
         @JsonProperty("EventTime")
         Double eventTime,
-
         @JsonProperty("KillerName")
         String killerName,
-
         @JsonProperty("VictimName")
         String victimName,
-
         @JsonProperty("Assisters")
         List<String> assisters,
-
         @JsonProperty("KillStreak")
         Integer killStreak,
-
         @JsonProperty("DragonType")
         String dragonType,
-
         @JsonProperty("Stolen")
         String stolen,
-
         @JsonProperty("TurretKilled")
         String turretKilled,
-
         @JsonProperty("InhibKilled")
         String inhibKilled,
-
         @JsonProperty("Acer")
         String acer,
-
         @JsonProperty("AcingTeam")
         String acingTeam
         ) {
