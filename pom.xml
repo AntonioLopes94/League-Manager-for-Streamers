@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.antonio</groupId>
-	<artifactId>autoclips-lol</artifactId>
+	<artifactId>League-Manger-for-Streamers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
